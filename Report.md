@@ -14,7 +14,7 @@ I splited the Training data to training (80%) and validation (20%), that train a
 I choiced the Random Forest as model. I applied the cross validation as caret fitting parameter.
 To consider in/out of sample error, 
 
-## Resuls
+## The outcome
 ### In/Out of Sample error
 ![Accuracy](https://github.com/hr-ishikawa/Practical_Machine_Learning_Assinments/blob/master/Accuracy.PNG "Accuracy")
 ### prediction
