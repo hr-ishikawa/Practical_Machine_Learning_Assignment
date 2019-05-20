@@ -50,10 +50,13 @@ for(i in c(5,10,15,20,30,50,100)){ # Percent of Test set
     index <- createDataPartition(train.t$classe, p=i/100, list=F, times=1)
     train.x <- train.t[ index,]
 
-    cl <- makeCluster(detectCores())
-    registerDoParallel(cl)
-    modFit <- train(classe~., method='rf', data=train.x)
-    stopCluster(cl)
+        cl <- makeCluster(detectCores()) # for Parallel processing
+        registerDoParallel(cl)           #
+    #-- Fit ----
+    modFit <- train(classe~., method='rf', data=train.x,
+                    trControl=trainControl(method = 'cv', number=10))
+    #-----------
+        stopCluster(cl)                 #
 
     # Accuracy fitted in sample
     x <- confusionMatrix(predict(modFit,newdata=train.x), train.x$classe)
