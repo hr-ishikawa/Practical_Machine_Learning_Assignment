@@ -84,9 +84,9 @@ print(v$table)
 # Visualize
 
 p <- ggplot(accu, aes(x=n_samples)) +
-     geom_line(aes(y=x_accu, colour='in' ) ) +
-     geom_line(aes(y=v_accu, colour='out of') ) +
-     scale_colour_manual('Sample from', values = c('in'='blue', 'out of'='red')) +
+     geom_line(aes(y=x_accu, colour='in Sample' ) ) +
+     geom_line(aes(y=v_accu, colour='out of Sample') ) +
+     scale_colour_manual('Accuracy', values=c('in Sample'='blue', 'out of Sample'='red')) +
      labs(title='The in/out of samples errors and number of samples',
           x='Number of Samples', y='Accuracy')
 plot(p)
