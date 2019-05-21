@@ -30,13 +30,13 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 ![Accuracy](https://github.com/hr-ishikawa/Practical_Machine_Learning_Assinments/blob/master/Accuracy.PNG "Accuracy")
 ### prediction
-|No.   |1|2|3|4|5|6|7|8|9|11|12|13|14|15|16|17|18|19|20|
+|No.|1|2|3|4|5|6|7|8|9|11|12|13|14|15|16|17|18|19|20|
 |:-|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
 |classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
 
-|No.| 1| 2|3|4|5|6|7|
-|:--|-:|-:|-:|-:|-:|-:|-:|
-|classe|B|A|B|A|A|E|D|
+|No.| 1| 2|3|4|5|6|7|8|9|11|12|13|14|15|16|17|18|19|20|
+|:--|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
+|classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
 
 
 |Number of Samples|Accuracy|Accuracy|
