@@ -36,6 +36,7 @@ test  <- all %>% filter(flag=='test')  %>% select(-flag)
 I splited the Training data to training (80%) and validation (20%), that train acutual and validate the outcome of training.
 
 ```R
+set.seed(0)
 index <- createDataPartition(train$classe, p=0.8, list=F, times=1)
 train.t <- train[ index,]
 train.v <- train[-index,]
@@ -43,69 +44,46 @@ train.v <- train[-index,]
 
 ## Fitting
 I choiced the Random Forest as model. I applied the cross validation as caret fitting option.
-To consider in/out of sample error, I changed Sample size and fitted.
 
 ```R
-accu <- data.frame()
-for(i in c(5,10,15,20,30,50,100)){ # Percent of Training without for validation
-    set.seed(0)
-    index <- createDataPartition(train.t$classe, p=i/100, list=F, times=1)
-    train.x <- train.t[ index,]
+set.seed(0)
 
-        cl <- makeCluster(detectCores()) # for Parallel processing
-        registerDoParallel(cl)           #
-    #-- Fit ----
-    modFit <- train(classe~., method='rf', data=train.x,
-                    trControl=trainControl(method = 'cv', number=10))
-    #-----------
-        stopCluster(cl)                 #
+    cl <- makeCluster(detectCores()) # for Parallel processing
+    registerDoParallel(cl)           #
+#-- Fit ----
+modFit <- train(classe~., method='rf', data=train.t,
+                trControl=trainControl(method = 'cv', number=10))
+#-----------
+    stopCluster(cl)                 #
 
-    # Accuracy fitted in sample
-    x <- confusionMatrix(predict(modFit,newdata=train.x), train.x$classe)
-    # Accuracy out of sample
-    v <- confusionMatrix(predict(modFit,newdata=train.v), train.v$classe)
-
-    accu <- bind_rows(accu, 
-                      data.frame(n_samples =nrow(train.x),
-                                 x_accu=x$overall['Accuracy'], 
-                                 v_accu=v$overall['Accuracy']))
-}
 ```
 
-## The outcome
-### In/Out of Sample error (Accuracy)
-The Accuracies of in Sample and Out of sample shows following table and graph.
-In the case of in sample, Accuracy is high even when there are small samples.
-But, I case of out of sample, always Accuracy is lower than in sample, especially when sample is small.
-That means fitted model is no good when the sample is small.
-When sample size is full (Training data without for validation), the out of sample Accuracy is high enough to complete.
+## The Result
+### In/Out of Sample error
+In sample error = 1 - Accuracy = 0.0%
+```R
+# In sample
+confusionMatrix(predict(modFit,newdata=train.t), train.t$classe)
+
+# Overall Statistics
+#               Accuracy : 1
+```
+
+Out of sample error = 1- Accuracy = 0.6%
 
 ```R
-print(accu)
-p <- ggplot(accu, aes(x=n_samples)) +
-     geom_line(aes(y=x_accu, colour='in Sample' ) ) +
-     geom_line(aes(y=v_accu, colour='out of Sample') ) +
-     scale_colour_manual('Accuracy', values=c('in Sample'='blue', 'out of Sample'='red')) +
-     labs(title='The in/out of samples errors and number of samples',
-          x='Number of Samples', y='Accuracy')
-plot(p)
+# Out of sample
+confusionMatrix(predict(modFit,newdata=train.v), train.v$classe)```
+
+# Overall Statistics
+#               Accuracy :  0.994
 ```
 
-|Number of Samples|Accuracy<br>In Sample|Accuracy<br>Out of Samplpe|
-|--:|--:|--:|
-|787|1.00|0.89396|
-|1572|1.00|0.93500|
-|2356|1.00|0.95463|
-|3142|1.00|0.96992|
-|4712|1.00|0.97476|
-|7850|1.00|0.98700|
-|15699|1.00|0.99541|
-
-![Accuracy](https://github.com/hr-ishikawa/Practical_Machine_Learning_Assinments/blob/master/Accuracy.PNG "Accuracy")
 ### Prediction
 The outcome of prediction shows following table.
 
 ```R
+# Predict from Test set
 pred <- predict(modFit, newdata=test)
 ```
 
