@@ -16,6 +16,11 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 ## The outcome
 ### In/Out of Sample error (Accuracy)
+The Accuracies of in Sample and Out of sample shows following table.
+In the case of in sample, Accuracy is high even when there are few samples.
+But, I case of out of sample, always Accuracy is lower than in sample, especially when there are few.
+That seems my model is no good.
+
 
 |Number of Samples|Accuracy<br>In Sample|Accuracy<br>Out of Samplpe|
 |--:|--:|--:|
@@ -29,7 +34,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 ![Accuracy](https://github.com/hr-ishikawa/Practical_Machine_Learning_Assinments/blob/master/Accuracy.PNG "Accuracy")
 ### prediction
-The outcom shows following table
+The outcome of prediction shows following table.
 
 |No.| 1| 2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|
 |:--|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
