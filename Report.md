@@ -72,7 +72,7 @@ Out of sample error = 1- Accuracy = 0.6%
 
 ```R
 # Out of sample
-confusionMatrix(predict(modFit,newdata=train.v), train.v$classe)```
+confusionMatrix(predict(modFit,newdata=train.v), train.v$classe)
 
 # Overall Statistics
 #               Accuracy :  0.994
