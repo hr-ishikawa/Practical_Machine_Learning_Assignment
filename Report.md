@@ -35,7 +35,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 |classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
 
 |No.|Accuracy|Accuracy|
-|:--:---:|--:|
+|:--|---:|--:|
 |classe|align-center|align-right|
 
 
