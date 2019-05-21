@@ -47,7 +47,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 ```R
 accu <- data.frame()
-for(i in c(5,10,15,20,30,50,100)){ # Percent of Test set
+for(i in c(5,10,15,20,30,50,100)){ # Percent of Training without for validation
     set.seed(0)
     index <- createDataPartition(train.t$classe, p=i/100, list=F, times=1)
     train.x <- train.t[ index,]
