@@ -20,6 +20,7 @@ The Accuracies of in Sample and Out of sample shows following table and graph.
 In the case of in sample, Accuracy is high even when there are small samples.
 But, I case of out of sample, always Accuracy is lower than in sample, especially when sample is small.
 That means fitted model is no good when the sample is small.
+When sample size is full (Training data without for validation), the out of sample Accuracy is high enough to complete.
 
 
 |Number of Samples|Accuracy<br>In Sample|Accuracy<br>Out of Samplpe|
@@ -33,7 +34,7 @@ That means fitted model is no good when the sample is small.
 |15699|1.00|0.99541|
 
 ![Accuracy](https://github.com/hr-ishikawa/Practical_Machine_Learning_Assinments/blob/master/Accuracy.PNG "Accuracy")
-### prediction
+### Prediction
 The outcome of prediction shows following table.
 
 |No.| 1| 2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|
