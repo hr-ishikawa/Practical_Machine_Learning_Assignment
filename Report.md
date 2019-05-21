@@ -17,8 +17,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 ## The outcome
 ### In/Out of Sample error (Accuracy)
 
-|Number of Samples|Accuracy|Accuracy|
-||In Sample|Out of Samplpe|
+|Number of Samples|Accuracy<br>In Sample|Accuracy<br>Out of Samplpe|
 |--:|--:|--:|
 |787|1.00|0.89396|
 |1572|1.00|0.93500|
