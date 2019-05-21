@@ -35,6 +35,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 |classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
 
 |Number of Samples|Accuracy|Accuracy|
+|Number of Samples|Accuracy|Accuracy|
 |---:|---:|--:|
 |align-left|align-center|align-right|
 |セルの左揃えです|セルの中央揃えです|セルの右揃えです|
