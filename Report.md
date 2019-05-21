@@ -16,10 +16,10 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 ## The outcome
 ### In/Out of Sample error (Accuracy)
-The Accuracies of in Sample and Out of sample shows following table.
-In the case of in sample, Accuracy is high even when there are few samples.
-But, I case of out of sample, always Accuracy is lower than in sample, especially when there are few.
-That seems my model is no good.
+The Accuracies of in Sample and Out of sample shows following table and graph.
+In the case of in sample, Accuracy is high even when there are small samples.
+But, I case of out of sample, always Accuracy is lower than in sample, especially when sample is small.
+That means fitted model is no good when the sample is small.
 
 
 |Number of Samples|Accuracy<br>In Sample|Accuracy<br>Out of Samplpe|
