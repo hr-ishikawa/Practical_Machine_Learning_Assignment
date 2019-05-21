@@ -19,7 +19,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 |Number of Samples|Accuracy|Accuracy|
 ||In Sample|Out of Samplpe|
-|--:|--:|--:|--:|
+|--:|--:|--:|
 |787|1.00|0.89396|
 |1572|1.00|0.93500|
 |2356|1.00|0.95463|
@@ -30,16 +30,7 @@ To consider in/out of sample error, I changed Sample size and fitted.
 
 ![Accuracy](https://github.com/hr-ishikawa/Practical_Machine_Learning_Assinments/blob/master/Accuracy.PNG "Accuracy")
 ### prediction
-|No.|1|2|3|4|5|6|7|8|9|11|12|13|14|15|16|17|18|19|20|
-|:-|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
-|classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
-
+The outcom shows following table
 |No.| 1| 2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|
 |:--|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
 |classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
-
-
-|Number of Samples|Accuracy|Accuracy|
-|---:|---:|--:|
-|align-left|align-center|align-right|
-|セルの左揃えです|セルの中央揃えです|セルの右揃えです|
