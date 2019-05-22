@@ -10,7 +10,8 @@ library(randomForest)
 library(doParallel)
 ```
 
-## Pre-Process of Data Sets
+## Read and Pre-Process of Data Sets
+Read The sample data sets to data.frame.
 The sample data sets contains the inappropriate data, such as NA (Blank) or text ("#Div0!") data.
 I dropped the coloumns contains inappropriate data from Training and Testing Data.
 And factorize the target coloumn named "classe" for classification.
@@ -42,7 +43,8 @@ train.v <- train[-index,]
 ```
 
 ## Fitting
-I choiced the Random Forest as model. I applied the cross validation as caret fitting option.
+I choiced the Random Forest as model. I use the cross validation as caret fitting option.
+Additional, It spent long time. so, applied parallel processing.
 
 ```R
 set.seed(0)
@@ -59,7 +61,8 @@ modFit <- train(classe~., method='rf', data=train.t,
 
 ## The Result
 ### In/Out of Sample error
-In sample error = 1 - Accuracy = 0.0%
+First, Caluculate In Sample error.
+
 ```R
 # In sample
 confusionMatrix(predict(modFit,newdata=train.t), train.t$classe)
@@ -67,9 +70,10 @@ confusionMatrix(predict(modFit,newdata=train.t), train.t$classe)
 # Overall Statistics
 #               Accuracy : 1
 ```
+In sample error (1 - Accuracy) is 0.0%.
+That is so good but overfitting?
 
-Out of sample error = 1- Accuracy = 0.6%
-
+Second, Caluculate Out of Sample error.
 ```R
 # Out of sample
 confusionMatrix(predict(modFit,newdata=train.v), train.v$classe)
@@ -77,15 +81,15 @@ confusionMatrix(predict(modFit,newdata=train.v), train.v$classe)
 # Overall Statistics
 #               Accuracy :  0.994
 ```
+Out of sample error (1 - Accuracy) is 0.6%
+That is very close to in sample error, and small enough.
+I can judge the fitted model is not overfitting, and good perfomance.
 
 ### Prediction
-The outcome of prediction shows following table.
+Predict form the test data set.
+From analysis below, I can expect the good outcome. 
 
 ```R
 # Predict from Test set
 pred <- predict(modFit, newdata=test)
 ```
-
-|No.| 1| 2|3|4|5|6|7|8|9|10|11|12|13|14|15|16|17|18|19|20|
-|:--|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
-|classe|B|A|B|A|A|E|D|B|A|A|B|C|B|A|E|E|A|B|B|B|
