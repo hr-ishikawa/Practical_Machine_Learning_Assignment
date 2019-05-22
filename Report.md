@@ -16,7 +16,7 @@ The sample data sets contains the inappropriate data, such as NA (Blank) or text
 I dropped the coloumns contains inappropriate data from Training and Testing Data.
 And factorize the target coloumn named "classe" for classification.
 
-```{R}
+```{r}
 train <- read_csv('pml-training.csv')
 test  <- read_csv('pml-testing.csv' )
 train <- train %>% mutate(flag='train')
