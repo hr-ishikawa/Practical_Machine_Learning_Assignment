@@ -3,7 +3,7 @@
 # Analysis Predicting manner
 
 ## Preparation
-```R
+```{R}
 library(tidyverse)
 library(caret)
 library(randomForest)
