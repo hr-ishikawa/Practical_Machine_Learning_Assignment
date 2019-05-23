@@ -1,0 +1,70 @@
+
+<!-- saved from url=(0038)data:text/html, <html contenteditable> -->
+<html contenteditable=""><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252"></head><body><h2>Practial Machine Learning Assignment</h2>
+<h1><a id="user-content-analysis-predicting-manner" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#analysis-predicting-manner"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h1><h1>Analysis Predicting manner</h1>
+<h2><a id="user-content-preparation" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#preparation"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h2><h2>Preparation</h2>
+<div class="highlight highlight-source-r"><pre>library(<span class="pl-smi">tidyverse</span>)
+library(<span class="pl-smi">caret</span>)
+library(<span class="pl-smi">randomForest</span>)
+library(<span class="pl-smi">doParallel</span>)</pre></div>
+<h2><a id="user-content-read-and-pre-process-of-data-sets" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#read-and-pre-process-of-data-sets"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h2><h2>Read and Pre-Process of Data Sets</h2>
+<p>Read The sample data sets to data.frame.
+The sample data sets contains the inappropriate data, such as NA (Blank) or text ("#Div0!") data.
+I dropped the coloumns contains inappropriate data from Training and Testing Data.
+And factorize the target coloumn named "classe" for classification.</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-smi">train</span> <span class="pl-k">&lt;-</span> read_csv(<span class="pl-s"><span class="pl-pds">'</span>pml-training.csv<span class="pl-pds">'</span></span>)
+<span class="pl-smi">test</span>  <span class="pl-k">&lt;-</span> read_csv(<span class="pl-s"><span class="pl-pds">'</span>pml-testing.csv<span class="pl-pds">'</span></span> )
+<span class="pl-smi">train</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">train</span> %<span class="pl-k">&gt;</span>% mutate(<span class="pl-v">flag</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>train<span class="pl-pds">'</span></span>)
+<span class="pl-smi">test</span>  <span class="pl-k">&lt;-</span> <span class="pl-smi">test</span>  %<span class="pl-k">&gt;</span>% mutate(<span class="pl-v">flag</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span> ) %<span class="pl-k">&gt;</span>% 
+          mutate(<span class="pl-v">problem_id</span><span class="pl-k">=</span>as.character(<span class="pl-smi">problem_id</span>)) %<span class="pl-k">&gt;</span>% rename(<span class="pl-v">classe</span><span class="pl-k">=</span><span class="pl-smi">problem_id</span>)
+
+<span class="pl-smi">all</span>  <span class="pl-k">&lt;-</span> bind_rows(<span class="pl-smi">train</span>,<span class="pl-smi">test</span>) %<span class="pl-k">&gt;</span>% select(names(<span class="pl-smi">train</span>)[<span class="pl-k">-</span>c(<span class="pl-c1">1</span>,<span class="pl-c1">3</span><span class="pl-k">:</span><span class="pl-c1">7</span>)])
+<span class="pl-smi">drop</span> <span class="pl-k">&lt;-</span> map_lgl(<span class="pl-smi">all</span>[,<span class="pl-c1">2</span><span class="pl-k">:</span><span class="pl-c1">153</span>], <span class="pl-k">function</span>(<span class="pl-smi">c</span>){ any(is.na(<span class="pl-smi">c</span>))} )      <span class="pl-c"><span class="pl-c">#</span> Drop columns contain NA</span>
+<span class="pl-smi">all</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">all</span>[, c(<span class="pl-c1">T</span>,<span class="pl-k">!</span><span class="pl-smi">drop</span>,<span class="pl-c1">T</span>,<span class="pl-c1">T</span>)]
+print(ncol(<span class="pl-smi">all</span>))
+
+<span class="pl-smi">train</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">all</span> %<span class="pl-k">&gt;</span>% filter(<span class="pl-smi">flag</span><span class="pl-k">==</span><span class="pl-s"><span class="pl-pds">'</span>train<span class="pl-pds">'</span></span>) %<span class="pl-k">&gt;</span>% select(<span class="pl-k">-</span><span class="pl-smi">flag</span>) %<span class="pl-k">&gt;</span>% mutate(<span class="pl-v">classe</span><span class="pl-k">=</span><span class="pl-k">factor</span>(<span class="pl-smi">classe</span>))
+<span class="pl-smi">test</span>  <span class="pl-k">&lt;-</span> <span class="pl-smi">all</span> %<span class="pl-k">&gt;</span>% filter(<span class="pl-smi">flag</span><span class="pl-k">==</span><span class="pl-s"><span class="pl-pds">'</span>test<span class="pl-pds">'</span></span>)  %<span class="pl-k">&gt;</span>% select(<span class="pl-k">-</span><span class="pl-smi">flag</span>)</pre></div>
+<h2><a id="user-content-split-data" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#split-data"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h2><h2>Split Data</h2>
+<p>I splited the Training data to training (80%) and validation (20%), that train acutual and validate the outcome of training.</p>
+<div class="highlight highlight-source-r"><pre>set.seed(<span class="pl-c1">0</span>)
+<span class="pl-smi">index</span> <span class="pl-k">&lt;-</span> createDataPartition(<span class="pl-smi">train</span><span class="pl-k">$</span><span class="pl-smi">classe</span>, <span class="pl-v">p</span><span class="pl-k">=</span><span class="pl-c1">0.8</span>, <span class="pl-v">list</span><span class="pl-k">=</span><span class="pl-c1">F</span>, <span class="pl-v">times</span><span class="pl-k">=</span><span class="pl-c1">1</span>)
+<span class="pl-smi">train.t</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">train</span>[ <span class="pl-smi">index</span>,]
+<span class="pl-smi">train.v</span> <span class="pl-k">&lt;-</span> <span class="pl-smi">train</span>[<span class="pl-k">-</span><span class="pl-smi">index</span>,]</pre></div>
+<h2><a id="user-content-fitting" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#fitting"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h2><h2>Fitting</h2>
+<p>I choiced the Random Forest as model. I use the cross validation as caret fitting option.
+Additional, It spent long time. so, applied parallel processing.</p>
+<div class="highlight highlight-source-r"><pre>set.seed(<span class="pl-c1">0</span>)
+
+    <span class="pl-smi">cl</span> <span class="pl-k">&lt;-</span> makeCluster(detectCores()) <span class="pl-c"><span class="pl-c">#</span> for Parallel processing</span>
+    registerDoParallel(<span class="pl-smi">cl</span>)           <span class="pl-c">#</span>
+<span class="pl-c"><span class="pl-c">#</span>-- Fit ----</span>
+<span class="pl-smi">modFit</span> <span class="pl-k">&lt;-</span> train(<span class="pl-smi">classe</span><span class="pl-k">~</span>., <span class="pl-v">method</span><span class="pl-k">=</span><span class="pl-s"><span class="pl-pds">'</span>rf<span class="pl-pds">'</span></span>, <span class="pl-v">data</span><span class="pl-k">=</span><span class="pl-smi">train.t</span>,
+                <span class="pl-v">trControl</span><span class="pl-k">=</span>trainControl(<span class="pl-v">method</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">'</span>cv<span class="pl-pds">'</span></span>, <span class="pl-v">number</span><span class="pl-k">=</span><span class="pl-c1">10</span>))
+<span class="pl-c"><span class="pl-c">#</span>-----------</span>
+    stopCluster(<span class="pl-smi">cl</span>)                 <span class="pl-c">#</span>
+</pre></div>
+<h2><a id="user-content-the-result" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#the-result"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h2><h2>The Result</h2>
+<h3><a id="user-content-inout-of-sample-error" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#inout-of-sample-error"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h3><h3>In/Out of Sample error</h3>
+<p>First, Caluculate In Sample error.</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-c"><span class="pl-c">#</span> In sample</span>
+confusionMatrix(predict(<span class="pl-smi">modFit</span>,<span class="pl-v">newdata</span><span class="pl-k">=</span><span class="pl-smi">train.t</span>), <span class="pl-smi">train.t</span><span class="pl-k">$</span><span class="pl-smi">classe</span>)
+
+<span class="pl-c"><span class="pl-c">#</span> Overall Statistics</span>
+<span class="pl-c"><span class="pl-c">#</span>               Accuracy : 1</span></pre></div>
+<p>In sample error (1 - Accuracy) is 0.0%.
+That is so good but overfitting?</p>
+<p>Second, Caluculate Out of Sample error.</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-c"><span class="pl-c">#</span> Out of sample</span>
+confusionMatrix(predict(<span class="pl-smi">modFit</span>,<span class="pl-v">newdata</span><span class="pl-k">=</span><span class="pl-smi">train.v</span>), <span class="pl-smi">train.v</span><span class="pl-k">$</span><span class="pl-smi">classe</span>)
+
+<span class="pl-c"><span class="pl-c">#</span> Overall Statistics</span>
+<span class="pl-c"><span class="pl-c">#</span>               Accuracy :  0.994</span></pre></div>
+<p>Out of sample error (1 - Accuracy) is 0.6%
+That is very close to in sample error, and small enough.
+I can judge the fitted model is not overfitting, and good perfomance.</p>
+<h3><a id="user-content-prediction" class="anchor" aria-hidden="true" href="https://github.com/hr-ishikawa/Practical_Machine_Learning_Assignment/blob/master/Report.md#prediction"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"></svg></a></h3><h3>Prediction</h3>
+<p>Predict form the test data set.
+From analysis below, I can expect the good outcome.</p>
+<div class="highlight highlight-source-r"><pre><span class="pl-c"><span class="pl-c">#</span> Predict from Test set</span>
+<span class="pl-smi">pred</span> <span class="pl-k">&lt;-</span> predict(<span class="pl-smi">modFit</span>, <span class="pl-v">newdata</span><span class="pl-k">=</span><span class="pl-smi">test</span>)</pre></div></body></html>
